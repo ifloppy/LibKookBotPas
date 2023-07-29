@@ -1,0 +1,5 @@
+*.ini
+LibKookBot
+/TestResource
+*.exe
+*.dbg

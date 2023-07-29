@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\codetyphon\fpc\fpc64\bin\x86_64-win64\fpc.exe" Date="1456537764"/>
+  <Params Value=" -MObjFPC -Scaghi -CirotR -O1 -gw2 -godwarfsets -gl -gh -Xg -gt -l -vewnhibq -FiF:\Github\LibKookBotPas\lib\x86_64-win64 -FuF:\Github\LibKookBotPas\ -FUF:\Github\LibKookBotPas\lib\x86_64-win64\ -FEF:\Github\LibKookBotPas\ -oF:\Github\LibKookBotPas\consolekookbotpas.exe consolekookbotpas.ppr"/>
+</CONFIG>

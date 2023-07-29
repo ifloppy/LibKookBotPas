@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Debug"/>
+    <Units>
+      <Unit>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <FRMtype Value="0"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <CursorPos X="31" Y="13"/>
+        <UsageCount Value="69"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="libkookbotpas.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="libKookBotPas"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="295"/>
+        <CursorPos X="11" Y="323"/>
+        <UsageCount Value="69"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="kookstructureutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="150"/>
+        <CursorPos X="37" Y="159"/>
+        <UsageCount Value="49"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="D:\Lazarus\LazWebsockets\websockets.lpk"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <UsageCount Value="4"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit>
+      <Unit>
+        <Filename Value="websocketsclient.pas"/>
+        <FRMtype Value="0"/>
+        <UnitName Value="WebsocketsClient"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="5"/>
+        <CursorPos X="91" Y="20"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\packages\fcl-base\src\uriparser.pp"/>
+        <FRMtype Value="0"/>
+        <UnitName Value="URIParser"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="191"/>
+        <CursorPos X="28" Y="201"/>
+        <UsageCount Value="5"/>
+      </Unit>
+      <Unit>
+        <Filename Value="wsstream.pas"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="698"/>
+        <CursorPos X="3" Y="702"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\classes\classesh.inc"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="106"/>
+        <CursorPos X="46" Y="120"/>
+        <UsageCount Value="5"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\win64\classes.pp"/>
+        <FRMtype Value="0"/>
+        <UnitName Value="Classes"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="61"/>
+        <CursorPos X="3" Y="90"/>
+        <UsageCount Value="5"/>
+      </Unit>
+      <Unit>
+        <Filename Value="wsmessages.pas"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="8"/>
+        <CursorPos X="14" Y="23"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="wsutils.pas"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="293"/>
+        <CursorPos X="3" Y="295"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\inc\objpash.inc"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="214"/>
+        <CursorPos X="38" Y="227"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\win64\system.pp"/>
+        <FRMtype Value="0"/>
+        <UnitName Value="System"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="212"/>
+        <CursorPos X="26" Y="227"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\inc\objpas.inc"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\fgl.pp"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="886"/>
+        <CursorPos Y="901"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\packages\fcl-json\src\fpjson.pp"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="744"/>
+        <CursorPos X="14" Y="754"/>
+        <UsageCount Value="8"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\codetyphon\fpcsrc\rtl\objpas\objpas.pp"/>
+        <FRMtype Value="0"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="53"/>
+        <CursorPos X="8" Y="35"/>
+        <UsageCount Value="8"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="28">
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="158" TopLine="140"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="156" Column="58" TopLine="146"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="157" Column="55" TopLine="137"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="158" Column="52" TopLine="146"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="204" Column="77" TopLine="192"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="287" Column="40" TopLine="119"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="284" Column="13" TopLine="270"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="203" Column="69" TopLine="180"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="229" Column="12" TopLine="208"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="236" Column="44" TopLine="217"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="240" Column="26" TopLine="133"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="136" Column="30" TopLine="126"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="218" Column="11" TopLine="208"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="25" Column="14" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="41" Column="55" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="269" Column="33" TopLine="249"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="275" Column="28" TopLine="254"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="284" Column="15" TopLine="257"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="22" Column="7"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="200" Column="11" TopLine="198"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="227" Column="22" TopLine="201"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="22" Column="7"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="43" Column="15" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="kookstructureutils.pas"/>
+        <Caret Line="215" Column="37" TopLine="205"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="45" Column="57" TopLine="35"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="44" Column="26" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="303" Column="6" TopLine="290"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="302" Column="72" TopLine="288"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="45" Column="67" TopLine="34"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
