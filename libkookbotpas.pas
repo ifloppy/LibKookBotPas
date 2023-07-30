@@ -5,13 +5,25 @@ unit libKookBotPas;
 interface
 
 uses
-  Classes, SysUtils, WebsocketsClient, fphttpclient, jsonparser, fpjson, URIParser, opensslsockets, wsstream, openssl, wsmessages, TypInfo, kookstructureutils;
+  Classes, SysUtils, WebsocketsClient, fphttpclient, jsonparser, fpjson, URIParser, opensslsockets, wsstream, openssl, wsmessages, kookstructureutils;
 
 const
   KookHTTPBaseURL = 'https://www.kookapp.cn/api/v3';
   isDebug = True;
 
 type
+  TObjProcedure = procedure of object;
+
+  THeartBeatThread = class(TThread)
+  private
+    instance: TObject;
+  public
+    constructor Create(Sender: TObject);
+    procedure Execute; override;
+    destructor Destroy; override;
+  end;
+
+
   TKookBot = class(TObject)
   private
     wsClient: TWebsocketClient;
@@ -22,9 +34,9 @@ type
     GatewayURL: string;
     isConnectionOK, isGotPong: boolean;
     statusCodeHello: integer;
+    HeartBeatThreadObj: THeartBeatThread;
     function GetGateway(IsResume: boolean = False): boolean;
-    procedure sendPingMessage();
-    procedure wsHeartBeatThread();
+
 
     procedure wsHandlerHandshakeSuccess(Sender: TObject; const Data: TResponseData);
     procedure wsHandlerHandshakeFailure(Sender: TObject; const Data: TResponseData);
@@ -43,18 +55,11 @@ type
     procedure GetBotJoinedGuilds();
     function GetGuildDetail(GuildID: string): TKookGuild;
     function GetGuildUsers(GuildID: string; ChannelID: string = ''): TKookUserArray;
+    function ChangeGuildNickName(GuildID: string; nickname: string = ''; user_id: string = ''): boolean;
+    function LeaveGuild(GuildID: string): boolean;
   end;
 
-  TObjProcedure = procedure of object;
 
-  TWaitAsyncExecute = class(TThread)
-  private
-    TargetProc: TObjProcedure;
-    ExecWaitTime: integer;
-  public
-    constructor Create(WaitTime: integer; TaskProc: TObjProcedure);
-    procedure Execute; override;
-  end;
 
 
 implementation
@@ -91,8 +96,21 @@ end;
 destructor TKookBot.Destroy();
 begin
   //Free objects to prevent mem leak
+  isConnectionOK := False;
+  //HeartBeatThreadObj.Terminate;
   wsClient.Free;
+
+  wsCommunicator.StopReceiveMessageThread;
+  //wsCommunicator.OnReceiveMessage:=nil;
+
+  while wsCommunicator.ReceiveMessageThreadRunning do
+    Sleep(50);
+  wsCommunicator.Free;
+
+
   httpClient.Free;
+  OpenSSLSocketHandler.Free;
+
 end;
 
 function TKookBot.GetGateway(IsResume: boolean = False): boolean;
@@ -128,8 +146,6 @@ end;
 
 procedure TKookBot.Connect();
 //Try to connect to ws server
-var
-  HeartBeatThread: TWaitAsyncExecute;
 begin
   wsCommunicator.Free;
 
@@ -140,7 +156,7 @@ begin
   wsCommunicator.OnReceiveMessage := @wsReceiveMessageHandler;
   wsCommunicator.StartReceiveMessageThread;
 
-  TWaitAsyncExecute.Create(36000, @wsHeartBeatThread);
+  HeartBeatThreadObj := THeartBeatThread.Create(Self);
 
 end;
 
@@ -169,7 +185,7 @@ var
   msgList: TWebsocketMessageOwnerList;
   m: TWebsocketMessage;//processing message
   JSONObject: TJSONObject;
-  EventTypeID: Integer;
+  EventTypeID: integer;
   MessageReceived: TKookMessage;
   buffer: string;
 begin
@@ -179,7 +195,8 @@ begin
   begin
     if isDebug then
     begin
-      WriteLn('Received message, type:' + GetEnumName(TypeInfo(TWebsocketMessageType), Ord(m.MessageType)));
+      Str(m.MessageType, buffer);
+      WriteLn('Received message, type:' + buffer);
       if m is TWebsocketStringMessage then
       begin
         WriteLn(TWebsocketStringMessage(m).Data);
@@ -194,7 +211,7 @@ begin
     begin
 
       JSONObject := GetJSON(TWebsocketStringMessage(m).Data) as TJSONObject;
-      EventTypeID:=JSONObject.Integers['s'];
+      EventTypeID := JSONObject.Integers['s'];
       case EventTypeID of
         1: begin//Hello message
           if JSONObject.Objects['d'].Integers['code'] = 0 then
@@ -207,29 +224,32 @@ begin
           end;
         end;
         0: begin//event
-          MessageReceived:=kookstructureutils.GetKookMessage(JSONObject.Objects['d']);
-          if isDebug then begin
+          MessageReceived := kookstructureutils.GetKookMessage(JSONObject.Objects['d']);
+          if isDebug then
+          begin
             Str(MessageReceived.message_type, buffer);
-            WriteLn('Message type:'+buffer);
-            WriteLn('Message content:'+MessageReceived.content)
+            WriteLn('Message type:' + buffer);
+            WriteLn('Message content:' + MessageReceived.content);
           end;
 
           if onKookMessage <> nil then onKookMessage(Self, MessageReceived);
         end;
         3: begin//pong message
-          isGotPong:=true;
+          isGotPong := True;
           if isDebug then WriteLn('Received pong message');
         end;
         5: begin//reconnect message
-          if isDebug then begin
+          if isDebug then
+          begin
             WriteLn('Reconnect command received from Kook');
           end;
-          isConnectionOK:=false;
-          GetGateway(true);
-          latestSN:=0;
+          isConnectionOK := False;
+          GetGateway(True);
+          latestSN := 0;
         end;
         6: begin//resume ack message
-          if isDebug then begin
+          if isDebug then
+          begin
             WriteLn('RESUME ACK');
           end;
         end;
@@ -241,28 +261,7 @@ begin
   msgList.Free;
 end;
 
-procedure TkookBot.sendPingMessage();
-var
-  s: String;
-begin
-  s:='{"s": 2,"sn": '+IntToStr(latestSN)+'}';
-  wsCommunicator.WriteStringMessage(s);
-  if isDebug then WriteLn('Send ping message');
-end;
 
-procedure TKookBot.wsHeartBeatThread();
-begin
-  while isConnectionOK do begin
-    sendPingMessage();
-    Sleep(6000);
-    if not isGotPong then begin
-      isConnectionOK:=false;
-      if onDisconnect <> nil then onDisconnect(Self);
-    end;
-    isGotPong:=false;
-    Sleep(30000);
-  end;
-end;
 
 //TODO:PAGES
 procedure TKookBot.GetBotJoinedGuilds();
@@ -272,16 +271,18 @@ var
   i: integer;
 begin
 
-  respStr:=httpClient.Get(KookHTTPBaseURL+'/guild/list');
+  respStr := httpClient.Get(KookHTTPBaseURL + '/guild/list');
   if isDebug then WriteLn(respStr);
-  respObj:=GetJSON(respStr) as TJSONObject;
+  respObj := GetJSON(respStr) as TJSONObject;
 
   SetLength(BotJoinedGuilds, 0);
 
-  with respObj.Objects['data'].Arrays['items'] do begin
+  with respObj.Objects['data'].Arrays['items'] do
+  begin
     SetLength(BotJoinedGuilds, Count);
-    for i := 0 to Pred(Count) do begin
-      BotJoinedGuilds[i]:=GetKookGuild(Objects[i]);
+    for i := 0 to Pred(Count) do
+    begin
+      BotJoinedGuilds[i] := GetKookGuild(Objects[i]);
     end;
 
   end;
@@ -294,9 +295,9 @@ var
   rs: string;
   ro: TJSONObject;
 begin
-  rs := httpClient.Get(KookHTTPBaseURL+'/guild/view?guild_id='+GuildID);
+  rs := httpClient.Get(KookHTTPBaseURL + '/guild/view?guild_id=' + GuildID);
   ro := GetJSON(rs) as TJSONObject;
-  Result:=GetKookGuild(ro.Objects['data']);
+  Result := GetKookGuild(ro.Objects['data']);
   ro.Free;
 end;
 
@@ -309,33 +310,113 @@ var
   ua: TKookUserArray;
   i: integer;
 begin
-  if ChannelID <> '' then channel_id_param:='&channel_id='+ChannelID;
-  rs := httpClient.Get(KookHTTPBaseURL+'/guild/user-list?guild_id='+GuildID+channel_id_param);
+  if ChannelID <> '' then channel_id_param := '&channel_id=' + ChannelID;
+  rs := httpClient.Get(KookHTTPBaseURL + '/guild/user-list?guild_id=' + GuildID + channel_id_param);
   ro := GetJSON(rs) as TJSONObject;
-  with ro.Objects['data'].Arrays['items'] do begin
+  with ro.Objects['data'].Arrays['items'] do
+  begin
     SetLength(ua, Count);
     for i := 0 to Pred(Count) do
     begin
       ua[i] := GetKookUser(Objects[i]);
     end;
   end;
-  Result:=ua;
+  Result := ua;
   ro.Free;
 end;
 
-constructor TWaitAsyncExecute.Create(WaitTime: integer; TaskProc: TObjProcedure);
+function TKookBot.ChangeGuildNickName(GuildID: string; nickname: string = ''; user_id: string = ''): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bodyStream: TStringStream;
 begin
-  inherited Create(False);
-  ExecWaitTime := WaitTime;
-  TargetProc := TaskProc;
-  Self.FreeOnTerminate := True;
+
+  if (Length(nickname) < 2) and (nickname <> '') then Exit(False);
+  if Length(nickname) > 64 then Exit(False);
+
+  bo := TJSONObject.Create();
+  bo.Add('guild_id', GuildID);
+  if nickname <> '' then bo.Add('nickname', nickname);
+  if user_id <> '' then bo.Add('user_id', user_id);
+
+  bodyStream := TStringStream.Create(bo.AsJSON);
+
+  httpClient.RequestBody := bodyStream;
+
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/guild/nickname');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  if isDebug then WriteLn('Change guild nick name status:', ro.Integers['code']);
+  Result := (ro.Integers['code'] = 0);
+  bodyStream.Free;
+  ro.Free;
+  bo.Free;
+
 end;
 
-procedure TWaitAsyncExecute.Execute();
-begin
-  Sleep(ExecWaitTime);
-  TargetProc();
 
+function TKookBot.LeaveGuild(GuildID: string): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bs: TStringStream;
+begin
+  bo := TJSONObject.Create();
+  bo.Add('guild_id', GuildID);
+  bs := TStringStream(bo.AsJSON);
+  httpClient.RequestBody := bs;
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/guild/leave');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  Result := (ro.Integers['code'] = 0);
+  bs.Free;
+  ro.Free;
+  bo.Free;
+end;
+
+constructor THeartBeatThread.Create(Sender: TObject);
+begin
+  inherited Create(False);
+  Self.FreeOnTerminate := True;
+  instance := Sender;
+end;
+
+procedure THeartBeatThread.Execute();
+var
+  s: string;
+  i: integer;
+begin
+  with instance as TKookBot do
+  begin
+    while isConnectionOK do
+    begin
+      for i := 0 to 30 do
+      begin
+        if not isConnectionOK then exit;
+        Sleep(1000);
+      end;
+
+      if not isConnectionOK then exit;
+      s := '{"s": 2,"sn": ' + IntToStr(latestSN) + '}';
+      wsCommunicator.WriteStringMessage(s);
+      if isDebug then WriteLn('Send ping message:', s);
+    end;
+  end;
+
+end;
+
+destructor THeartBeatThread.Destroy;
+begin
+  instance := nil;
 end;
 
 end.

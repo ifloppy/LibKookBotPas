@@ -6,24 +6,36 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, libKookBotPas, kookstructureutils, IniFiles
-  { you can add units after this };
+  Classes,
+  libKookBotPas,
+  kookstructureutils,
+  IniFiles { you can add units after this };
+
 var
   KookBot: TKookBot;
   cmd: string;
   cfg: TIniFile;
 begin
-  cfg:=TIniFile.Create('config.ini');
-  KookBot:=TKookBot.Create(cfg.ReadString('bot', 'token', ''));
+  cfg := TIniFile.Create('config.ini');
+  KookBot := TKookBot.Create(cfg.ReadString('bot', 'token', ''));
   //WriteLn(KookBot.GetGateway());
-  while true do begin
+  while True do
+  begin
     ReadLn(cmd);
     if cmd = 'stop' then break;
-    if cmd = 'guild ls' then begin
+    if cmd = 'guild ls' then
+    begin
       KookBot.GetBotJoinedGuilds();
+    end;
+    if cmd = 'nickname' then
+    begin
+      if KookBot.ChangeGuildNickName('1044803730133652', 'test') then
+        WriteLn('true')
+      else
+        WriteLn('false');
 
     end;
   end;
-  KookBot.Free;
-end.
 
+  KookBot.Destroy;
+end.
