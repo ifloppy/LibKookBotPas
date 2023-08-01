@@ -38,4 +38,5 @@ begin
   end;
 
   KookBot.Destroy;
+  WriteLn('Bye');
 end.

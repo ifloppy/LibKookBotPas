@@ -9,23 +9,23 @@
         <Filename Value="consolekookbotpas.ppr"/>
         <FRMtype Value="0"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="14"/>
-        <CursorPos X="18" Y="40"/>
-        <UsageCount Value="93"/>
+        <TopLine Value="15"/>
+        <CursorPos Y="41"/>
+        <UsageCount Value="94"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="libkookbotpas.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="libKookBotPas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="93"/>
-        <CursorPos Y="110"/>
-        <UsageCount Value="93"/>
+        <TopLine Value="90"/>
+        <CursorPos Y="104"/>
+        <UsageCount Value="94"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -35,7 +35,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="138"/>
         <CursorPos X="37" Y="159"/>
-        <UsageCount Value="73"/>
+        <UsageCount Value="74"/>
       </Unit>
       <Unit>
         <Filename Value="D:\Lazarus\LazWebsockets\websockets.lpk"/>
@@ -70,8 +70,8 @@
         <FRMtype Value="0"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="662"/>
-        <CursorPos X="3" Y="665"/>
+        <TopLine Value="116"/>
+        <CursorPos X="14" Y="125"/>
         <UsageCount Value="12"/>
       </Unit>
       <Unit>
@@ -142,9 +142,9 @@
         <FRMtype Value="0"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="886"/>
-        <CursorPos Y="901"/>
-        <UsageCount Value="4"/>
+        <TopLine Value="1128"/>
+        <CursorPos X="28" Y="1143"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="C:\codetyphon\fpcsrc\packages\fcl-json\src\fpjson.pp"/>
@@ -168,90 +168,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="159" Column="31" TopLine="139"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="106" Column="62" TopLine="81"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="103" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="107" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="108" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="107" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="108" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="107" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="108" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="103" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="107" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="108" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="107" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="108" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="107" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="103" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="102" Column="18" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="102" Column="18" TopLine="88"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="158" Column="28" TopLine="134"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="101" Column="25" TopLine="93"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="102" TopLine="93"/>
-      </Position>
-      <Position>
-        <Filename Value="libkookbotpas.pas"/>
         <Caret Line="101" TopLine="93"/>
       </Position>
       <Position>
@@ -280,11 +196,95 @@
       </Position>
       <Position>
         <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="102" TopLine="93"/>
+        <Caret Line="110" TopLine="93"/>
       </Position>
       <Position>
         <Filename Value="libkookbotpas.pas"/>
-        <Caret Line="101" TopLine="93"/>
+        <Caret Line="103" Column="42" TopLine="93"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="103" Column="38" TopLine="93"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="51" Column="16" TopLine="38"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="105" Column="23" TopLine="87"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="104" Column="45" TopLine="87"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="88" Column="42" TopLine="183"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="104" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="105" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="106" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="105" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="107" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="108" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="110" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="111" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="libkookbotpas.pas"/>
+        <Caret Line="113" TopLine="90"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="18" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="41" TopLine="14"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="18" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="41" TopLine="15"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="18" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="42" TopLine="15"/>
+      </Position>
+      <Position>
+        <Filename Value="consolekookbotpas.ppr"/>
+        <Caret Line="18" TopLine="13"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -292,15 +292,4 @@
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
-  <Debugging>
-    <BreakPoints>
-      <Item>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="libkookbotpas.pas"/>
-        <Line Value="110"/>
-      </Item>
-    </BreakPoints>
-  </Debugging>
 </CONFIG>

@@ -97,16 +97,15 @@ destructor TKookBot.Destroy();
 begin
   //Free objects to prevent mem leak
   isConnectionOK := False;
-  //HeartBeatThreadObj.Terminate;
-  wsClient.Free;
+  HeartBeatThreadObj.Terminate;
+
 
   wsCommunicator.StopReceiveMessageThread;
-  //wsCommunicator.OnReceiveMessage:=nil;
-
+  wsCommunicator.WriteMessage(wmtClose).Free;
   while wsCommunicator.ReceiveMessageThreadRunning do
     Sleep(50);
   wsCommunicator.Free;
-
+  wsClient.Free;
 
   httpClient.Free;
   OpenSSLSocketHandler.Free;
