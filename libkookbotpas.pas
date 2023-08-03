@@ -57,6 +57,25 @@ type
     function GetGuildUsers(GuildID: string; ChannelID: string = ''): TKookUserArray;
     function ChangeGuildNickName(GuildID: string; nickname: string = ''; user_id: string = ''): boolean;
     function LeaveGuild(GuildID: string): boolean;
+    function KickGuild(GuildID: string; UserID: string): boolean;
+    function GetChannelList(GuildID: string): TKookChannelArray;
+    function GetChannelDetail(ChannelID: string): TKookChanel;
+    //TODO:Create,Edit,Delete channel
+    //TODO:List,View channel Message
+    function SendTextMessage(ChannelID: string; content: string; QuoteID: string = ''; TempTargetID: string = ''; FinalMessageID: TStringStream = nil): boolean;
+    function UpdateTextMessage(MessageID: string; content: string): boolean;
+    function DeleteTextMessage(MessageID: string): boolean;
+    //TODO:Get reaction of message
+    function AddMessageReaction(MessageID: string; emoji: string): boolean;
+    function RemoveMessageReaction(MessageID: string; emoji: string; UserID: string = ''): boolean;
+
+    //PM
+    //TODO: All pm function
+
+    //TODO: User api
+
+    //麻了你Kook功能真鸡巴多，待我慢慢来写
+
   end;
 
 
@@ -97,13 +116,13 @@ destructor TKookBot.Destroy();
 begin
   //Free objects to prevent mem leak
   isConnectionOK := False;
-  HeartBeatThreadObj.Terminate;
+  HeartBeatThreadObj.Free;
 
 
   wsCommunicator.StopReceiveMessageThread;
   wsCommunicator.WriteMessage(wmtClose).Free;
   while wsCommunicator.ReceiveMessageThreadRunning do
-    Sleep(50);
+    Sleep(10);
   wsCommunicator.Free;
   wsClient.Free;
 
@@ -232,6 +251,9 @@ begin
           end;
 
           if onKookMessage <> nil then onKookMessage(Self, MessageReceived);
+
+          //update SN
+          latestSN := JSONObject.Integers['sn'];
         end;
         3: begin//pong message
           isGotPong := True;
@@ -252,6 +274,12 @@ begin
             WriteLn('RESUME ACK');
           end;
         end;
+        else
+          begin
+            if isDebug then begin
+              Write('Unknown message type:', JSONObject.Integers['s']);
+            end;
+          end;
       end;
 
       JSONObject.Free;
@@ -367,10 +395,197 @@ var
 begin
   bo := TJSONObject.Create();
   bo.Add('guild_id', GuildID);
-  bs := TStringStream(bo.AsJSON);
+  bs := TStringStream.Create(bo.AsJSON);
   httpClient.RequestBody := bs;
   try
     rs := httpClient.Post(KookHTTPBaseURL + '/guild/leave');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  Result := (ro.Integers['code'] = 0);
+  bs.Free;
+  ro.Free;
+  bo.Free;
+end;
+
+function TKookBot.KickGuild(GuildID: string; UserID: string): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bs: TStringStream;
+begin
+  bo := TJSONObject.Create();
+  bo.Add('guild_id', GuildID);
+  bo.Add('target_id', UserID);
+  bs := TStringStream.Create(bo.AsJSON);
+  httpClient.RequestBody := bs;
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/guild/kickout');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  Result := (ro.Integers['code'] = 0);
+  bs.Free;
+  ro.Free;
+  bo.Free;
+end;
+
+function TKookBot.GetChannelList(GuildID: string): TKookChannelArray;
+var
+  respStr: string;
+  respObj: TJSONObject;
+  i: integer;
+  KookChannelArray: TKookChannelArray;
+begin
+
+  respStr := httpClient.Get(KookHTTPBaseURL + '/channel/list?guild_id=' + GuildID);
+  if isDebug then WriteLn(respStr);
+  respObj := GetJSON(respStr) as TJSONObject;
+
+  SetLength(KookChannelArray, 0);
+
+  with respObj.Objects['data'].Arrays['items'] do
+  begin
+    SetLength(KookChannelArray, Count);
+    for i := 0 to Pred(Count) do
+    begin
+      KookChannelArray[i] := GetKookChannel(Objects[i]);
+    end;
+
+  end;
+  Result:=KookChannelArray;
+  respObj.Free;
+end;
+
+function TKookBot.GetChannelDetail(ChannelID: string): TKookChanel;
+var
+  rs: string;
+  ro: TJSONObject;
+begin
+  rs := httpClient.Get(KookHTTPBaseURL + '/channel/view?guild_id=' + ChannelID);
+  ro := GetJSON(rs) as TJSONObject;
+  Result := GetKookChannel(ro.Objects['data']);
+  ro.Free;
+end;
+
+function TKookBot.SendTextMessage(ChannelID: string; content: string; QuoteID: string = ''; TempTargetID: string = ''; FinalMessageID: TStringStream = nil): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bs: TStringStream;
+begin
+  bo := TJSONObject.Create();
+  bo.Add('target_id', ChannelID);
+  bo.Add('content', content);
+  if QuoteID <> '' then bo.Add('quote', QuoteID);
+  if TempTargetID <> '' then bo.Add('temp_target_id', TempTargetID);
+  //Final message id: save message id. REMEMBER TO FREE THIS OBJECT
+  bs := TStringStream.Create(bo.AsJSON);
+  httpClient.RequestBody := bs;
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/message/create');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  Result := (ro.Integers['code'] = 0);
+  if FinalMessageID <> nil then FinalMessageID := TStringStream.Create(ro.Objects['data'].Strings['id']);
+  bs.Free;
+  ro.Free;
+  bo.Free;
+
+end;
+
+function TKookBot.UpdateTextMessage(MessageID: string; content: string): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bs: TStringStream;
+begin
+  bo := TJSONObject.Create();
+  bo.Add('msg_id', MessageID);
+  bo.Add('content', content);
+  bs := TStringStream.Create(bo.AsJSON);
+  httpClient.RequestBody := bs;
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/message/update');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  Result := (ro.Integers['code'] = 0);
+  bs.Free;
+  ro.Free;
+  bo.Free;
+end;
+
+function TKookBot.DeleteTextMessage(MessageID: string): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bs: TStringStream;
+begin
+  bo := TJSONObject.Create();
+  bo.Add('msg_id', MessageID);
+  bs := TStringStream.Create(bo.AsJSON);
+  httpClient.RequestBody := bs;
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/message/delete');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  Result := (ro.Integers['code'] = 0);
+  bs.Free;
+  ro.Free;
+  bo.Free;
+end;
+
+function TKookBot.AddMessageReaction(MessageID: string; emoji: string): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bs: TStringStream;
+begin
+  bo := TJSONObject.Create();
+  bo.Add('msg_id', MessageID);
+  bo.Add('emoji', emoji);
+  bs := TStringStream.Create(bo.AsJSON);
+  httpClient.RequestBody := bs;
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/message/add-reaction');
+  except
+
+  end;
+  httpClient.RequestBody := nil;
+  ro := GetJSON(rs) as TJSONObject;
+  Result := (ro.Integers['code'] = 0);
+  bs.Free;
+  ro.Free;
+  bo.Free;
+end;
+
+function TKookBot.RemoveMessageReaction(MessageID: string; emoji: string; UserID: string = ''): boolean;
+var
+  rs: string;
+  ro, bo: TJSONObject;
+  bs: TStringStream;
+begin
+  bo := TJSONObject.Create();
+  bo.Add('msg_id', MessageID);
+  bo.Add('emoji', emoji);
+  if UserID <> '' then bo.Add('user_id', UserID);
+  bs := TStringStream.Create(bo.AsJSON);
+  httpClient.RequestBody := bs;
+  try
+    rs := httpClient.Post(KookHTTPBaseURL + '/message/delete-reaction');
   except
 
   end;

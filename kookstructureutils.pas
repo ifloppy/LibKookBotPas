@@ -66,7 +66,7 @@ type
   end;
 
   TKookGuildNotifyType = (kntDefault, kntAll, kntAtOnly, kntNo);
-  TKookChannelType = (kctText = 1, kctVoice = 2);
+  TKookChannelType = (kctGroup = 0, kctText = 1, kctVoice = 2);
   TKookMessageType = (kmtText = 1, kmtImage = 2, kmtVideo = 3, kmtFile = 4, kmtAudio = 8,
     kmtKMarkdown = 9, kmtCard = 10, kmtSystem = 255);
 
@@ -82,9 +82,11 @@ type
     parent_id: string;
     level: integer;
     slow_mode: integer;
-    channeltype: TKookChannelType;
+    channel_type: TKookChannelType;
     permission_sync: integer;
     has_password: boolean;
+    isDetailed: boolean;
+    //TODO:more information
   end;
 
   TKookGuild = record
@@ -159,6 +161,7 @@ type
   TKEventMessage = procedure(Sender: TObject; Message: TKookMessage);
 
   TKookUserArray = array of TKookUser;
+  TKookChannelArray = array of TKookChanel;
 
 function GetKookAttachments(Data: TJSONObject): TKookAttachments;
 function GetKookChannel(Data: TJSONObject): TKookChanel;
@@ -174,7 +177,7 @@ function GetKookChannel(Data: TJSONObject): TKookChanel;
 var
   kc: TKookChanel;
 begin
-  kc.channeltype := TKookChannelType(Data.Integers['type']);
+  kc.channel_type := TKookChannelType(Data.Integers['type']);
   kc.guild_id := Data.Strings['guild_id'];
   kc.has_password := Data.Booleans['has_password'];
   kc.id := Data.Strings['id'];

@@ -11,6 +11,10 @@ uses
   kookstructureutils,
   IniFiles { you can add units after this };
 
+const
+  testserverid = '1044803730133652';
+  testchannelid = '2268506847369991';
+
 var
   KookBot: TKookBot;
   cmd: string;
@@ -29,14 +33,17 @@ begin
     end;
     if cmd = 'nickname' then
     begin
-      if KookBot.ChangeGuildNickName('1044803730133652', 'test') then
+      if KookBot.ChangeGuildNickName(testserverid, 'test') then
         WriteLn('true')
       else
         WriteLn('false');
 
     end;
+    if cmd = 'sendmsg' then begin
+      if KookBot.SendTextMessage(testchannelid, 'This is a test message') then WriteLn('true') else Write('false');
+    end;
   end;
 
-  KookBot.Destroy;
+  KookBot.Free;
   WriteLn('Bye');
 end.
