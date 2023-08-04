@@ -19,6 +19,7 @@ var
   KookBot: TKookBot;
   cmd: string;
   cfg: TIniFile;
+
 begin
   cfg := TIniFile.Create('config.ini');
   KookBot := TKookBot.Create(cfg.ReadString('bot', 'token', ''));
@@ -40,6 +41,7 @@ begin
 
     end;
     if cmd = 'sendmsg' then begin
+
       if KookBot.SendTextMessage(testchannelid, 'This is a test message') then WriteLn('true') else Write('false');
     end;
   end;

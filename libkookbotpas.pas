@@ -494,7 +494,8 @@ begin
   httpClient.RequestBody := nil;
   ro := GetJSON(rs) as TJSONObject;
   Result := (ro.Integers['code'] = 0);
-  if FinalMessageID <> nil then FinalMessageID := TStringStream.Create(ro.Objects['data'].Strings['id']);
+  //if FinalMessageID <> nil then FinalMessageID := TStringStream.Create(ro.Objects['data'].Strings['id']);
+  if Assigned(FinalMessageID) then FinalMessageID.WriteString(ro.Objects['data'].Strings['id']);
   bs.Free;
   ro.Free;
   bo.Free;
