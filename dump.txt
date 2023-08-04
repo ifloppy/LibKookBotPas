@@ -1,0 +1,7 @@
+F:\Github\LibKookBotPas\consolekookbotpas.exe 
+Heap dump by heaptrc unit of "F:\Github\LibKookBotPas\consolekookbotpas.exe"
+881 memory blocks allocated : 135604/138304
+881 memory blocks freed     : 135604/138304
+0 unfreed memory blocks : 0
+True heap size : 262144 (480 used in System startup)
+True free heap : 261664

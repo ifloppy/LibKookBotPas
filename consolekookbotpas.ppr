@@ -9,7 +9,8 @@ uses
   Classes,
   libKookBotPas,
   kookstructureutils,
-  IniFiles { you can add units after this };
+  IniFiles,
+  SysUtils{ you can add units after this };
 
 const
   testserverid = '1044803730133652';
@@ -21,9 +22,13 @@ var
   cfg: TIniFile;
   bufferStringStream: TStringStream;
 begin
+  if FileExists('dump.txt') then DeleteFile('dump.txt');
+  SetHeapTraceOutput('dump.txt');
+
   cfg := TIniFile.Create('config.ini');
   KookBot := TKookBot.Create(cfg.ReadString('bot', 'token', ''));
-  //WriteLn(KookBot.GetGateway());
+  cfg.Free;
+
   while True do
   begin
     ReadLn(cmd);
@@ -49,6 +54,7 @@ begin
   end;
 
   KookBot.Free;
+
   WriteLn('Bye');
 
 end.

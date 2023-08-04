@@ -174,41 +174,34 @@ function GetKookUser(Data: TJSONObject): TKookUser;
 implementation
 
 function GetKookChannel(Data: TJSONObject): TKookChanel;
-var
-  kc: TKookChanel;
 begin
-  kc.channel_type := TKookChannelType(Data.Integers['type']);
-  kc.guild_id := Data.Strings['guild_id'];
-  kc.has_password := Data.Booleans['has_password'];
-  kc.id := Data.Strings['id'];
-  kc.is_category := Data.Booleans['is_category'];
-  kc.level := Data.Integers['level'];
-  kc.Name := Data.Strings['name'];
-  kc.parent_id := Data.Strings['parent_id'];
-  kc.permission_sync := Data.Integers['permission_sync'];
-  kc.slow_mode := Data.Integers['slow_mode'];
-  kc.topic := Data.Strings['topic'];
-  kc.user_id := Data.Strings['user_id'];
-  exit(kc);
+  Result.channel_type := TKookChannelType(Data.Integers['type']);
+  Result.guild_id := Data.Strings['guild_id'];
+  Result.has_password := Data.Booleans['has_password'];
+  Result.id := Data.Strings['id'];
+  Result.is_category := Data.Booleans['is_category'];
+  Result.level := Data.Integers['level'];
+  Result.Name := Data.Strings['name'];
+  Result.parent_id := Data.Strings['parent_id'];
+  Result.permission_sync := Data.Integers['permission_sync'];
+  Result.slow_mode := Data.Integers['slow_mode'];
+  Result.topic := Data.Strings['topic'];
+  Result.user_id := Data.Strings['user_id'];
 end;
 
 function GetKookRole(Data: TJSONObject): TKookRole;
-var
-  r: TKookRole;
 begin
-  r.color := Data.Integers['color'];
-  r.hoist := Data.Integers['hoist'];
-  r.mentionable := Data.Integers['mentionable'];
-  r.Name := Data.Strings['name'];
-  r.permissions := Data.Integers['permissions'];
-  r.position := Data.Integers['position'];
-  r.role_id := Data.Integers['role_id'];
-  Exit(r);
+  Result.color := Data.Integers['color'];
+  Result.hoist := Data.Integers['hoist'];
+  Result.mentionable := Data.Integers['mentionable'];
+  Result.Name := Data.Strings['name'];
+  Result.permissions := Data.Integers['permissions'];
+  Result.position := Data.Integers['position'];
+  Result.role_id := Data.Integers['role_id'];
 end;
 
 function GetKookGuild(Data: TJSONObject): TKookGuild;
 var
-  g: TKookGuild;
   ca: array of TKookChanel;
   ra: array of TKookRole;
   channels, roles: TJSONArray;
@@ -216,14 +209,15 @@ var
 begin
   if Data.Find('channels') = nil then
   begin
-    g.isDetailed:=false;
+    Result.isDetailed := False;
 
-    if Data.Find('boost_num') <> nil then g.boost_num:=Data.Integers['boost_num'];
-    if Data.Find('level') <> nil then g.boost_num:=Data.Integers['level'];
+    if Data.Find('boost_num') <> nil then Result.boost_num := Data.Integers['boost_num'];
+    if Data.Find('level') <> nil then Result.boost_num := Data.Integers['level'];
 
-
-  end else begin
-    g.isDetailed:=true;
+  end
+  else
+  begin
+    Result.isDetailed := True;
 
     channels := Data.Arrays['channels'];
     SetLength(ca, channels.Count);
@@ -231,7 +225,7 @@ begin
     begin
       ca[i] := GetKookChannel(channels.Objects[i]);
     end;
-    g.channels := ca;
+    Result.channels := ca;
 
 
     roles := Data.Arrays['roles'];
@@ -240,96 +234,89 @@ begin
     begin
       ra[i] := GetKookRole(roles.Objects[i]);
     end;
-    g.roles := ra;
+    Result.roles := ra;
   end;
 
 
-  g.default_channel_id := Data.Strings['default_channel_id'];
-  g.enable_open := Data.Booleans['enable_open'];
-  g.icon := Data.Strings['icon'];
-  g.id := Data.Strings['id'];
-  g.Name := Data.Strings['name'];
-  g.notify_type := TKookGuildNotifyType(Data.Integers['notify_type']);
-  g.region := Data.Strings['region'];
+  Result.default_channel_id := Data.Strings['default_channel_id'];
+  Result.enable_open := Data.Booleans['enable_open'];
+  Result.icon := Data.Strings['icon'];
+  Result.id := Data.Strings['id'];
+  Result.Name := Data.Strings['name'];
+  Result.notify_type := TKookGuildNotifyType(Data.Integers['notify_type']);
+  Result.region := Data.Strings['region'];
 
 
 
-  g.topic := Data.Strings['topic'];
-  g.user_id := Data.Strings['user_id'];
-  g.welcome_channel_id := Data.Strings['welcome_channel_id'];
-  exit(g);
+  Result.topic := Data.Strings['topic'];
+  Result.user_id := Data.Strings['user_id'];
+  Result.welcome_channel_id := Data.Strings['welcome_channel_id'];
+
+  channels.Free;
+  roles.Free;
 end;
 
 function GetKookUser(Data: TJSONObject): TKookUser;
 var
-  u: TKookUser;
   i: integer;
 begin
-  if Data.Find('mobile_verified') = nil then begin
-    u.isDetailed:=false;
-  end else begin
-    u.isDetailed:=true;
-    u.mobile_verified := Data.Booleans['mobile_verified'];
+  if Data.Find('mobile_verified') = nil then
+  begin
+    Result.isDetailed := False;
+  end
+  else
+  begin
+    Result.isDetailed := True;
+    Result.mobile_verified := Data.Booleans['mobile_verified'];
   end;
 
-  u.id := Data.Strings['id'];
-  u.username := Data.Strings['username'];
-  u.nickname := Data.Strings['nickname'];
-  u.identify_num := Data.Strings['identify_num'];
-  u.online := Data.Booleans['online'];
-  u.bot := Data.Booleans['bot'];
-  u.status := Data.Integers['status'];
-  u.avatar := Data.Strings['avatar'];
-  u.vip_avatar := Data.Strings['vip_avatar'];
+  Result.id := Data.Strings['id'];
+  Result.username := Data.Strings['username'];
+  Result.nickname := Data.Strings['nickname'];
+  Result.identify_num := Data.Strings['identify_num'];
+  Result.online := Data.Booleans['online'];
+  Result.bot := Data.Booleans['bot'];
+  Result.status := Data.Integers['status'];
+  Result.avatar := Data.Strings['avatar'];
+  Result.vip_avatar := Data.Strings['vip_avatar'];
 
 
-  SetLength(u.roles, Data.Arrays['roles'].Count);
+  SetLength(Result.roles, Data.Arrays['roles'].Count);
   for i := 0 to Pred(Data.Arrays['roles'].Count) do
   begin
-    u.roles[i] := Data.Arrays['roles'].Integers[i];
+    Result.roles[i] := Data.Arrays['roles'].Integers[i];
   end;
-
-  exit(u);
 
 end;
 
 function GetKookAttachments(Data: TJSONObject): TKookAttachments;
-var
-  a: TKookAttachments;
 begin
-  a.attachmentType := Data.Strings['type'];
-  a.url := Data.Strings['url'];
-  a.Name := Data.Strings['name'];
-  a.size := Data.Integers['size'];
-  exit(a);
+  Result.attachmentType := Data.Strings['type'];
+  Result.url := Data.Strings['url'];
+  Result.Name := Data.Strings['name'];
+  Result.size := Data.Integers['size'];
 end;
 
 function GetKookQuote(Data: TJSONObject): TKookQuote;
-var
-  q: TKookQuote;
 begin
-  q.id := Data.Strings['id'];
-  q.QuotedMessageType := Data.Integers['type'];
-  q.Content := Data.Strings['content'];
-  q.Create_At := Data.Integers['create_at'];
-  q.author := GetKookUser(Data.Objects['author']);
-  exit(q);
+  Result.id := Data.Strings['id'];
+  Result.QuotedMessageType := Data.Integers['type'];
+  Result.Content := Data.Strings['content'];
+  Result.Create_At := Data.Integers['create_at'];
+  Result.author := GetKookUser(Data.Objects['author']);
 end;
 
 function GetKookMessage(Data: TJSONObject): TKookMessage;
-var
-  m: TKookMessage;
 begin
-  m.channel_type := Data.Strings['channel_type'];
-  m.message_type := TKookMessageType(Data.Integers['type']);
-  m.target_id := Data.Strings['target_id'];
-  m.author_id := Data.Strings['author_id'];
-  m.content := Data.Strings['content'];
-  m.msg_id := Data.Strings['msg_id'];
-  m.msg_timestamp := Data.Integers['msg_timestamp'];
-  m.nonce := Data.Strings['nonce'];
-  m.extra := Data.Objects['extra'];
-  exit(m);
+  Result.channel_type := Data.Strings['channel_type'];
+  Result.message_type := TKookMessageType(Data.Integers['type']);
+  Result.target_id := Data.Strings['target_id'];
+  Result.author_id := Data.Strings['author_id'];
+  Result.content := Data.Strings['content'];
+  Result.msg_id := Data.Strings['msg_id'];
+  Result.msg_timestamp := Data.Integers['msg_timestamp'];
+  Result.nonce := Data.Strings['nonce'];
+  Result.extra := Data.Objects['extra'];
 end;
 
 end.

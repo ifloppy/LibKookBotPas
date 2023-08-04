@@ -24,7 +24,7 @@ type
   end;
 
 
-  TKookBot = class(TObject)
+  TKookBot = class
   private
     wsClient: TWebsocketClient;
     httpClient: TFPHTTPClient;
@@ -84,15 +84,12 @@ type
 implementation
 
 constructor TKookBot.Create(BotToken: string; LatestSNCode: integer = 0);
+var
+  URI: TURI;
 begin
   InitSSLInterface; //OpenSSL library required
 
-  //Prepare for websocket
-  wsClient := TWebsocketClient.Create('', 443);
-  wsClient.OnHandshakeSuccess := @wsHandlerHandshakeSuccess;
-  wsClient.OnHandshakeFailure := @wsHandlerHandshakeFailure;
-  OpenSSLSocketHandler := TOpenSSLSocketHandler.Create;
-  isConnectionOK := False;
+
 
   //Prepare for http client
   httpClient := TFPHTTPClient.Create(nil);
@@ -101,11 +98,27 @@ begin
   httpClient.AddHeader('User-Agent', 'libKookBotPas');
   httpClient.AddHeader('Authorization', 'Bot ' + BotToken);
 
+  GetGateway();
+  URI := ParseURI(GatewayURL, 'wss', 443, True);
+
+
+  //Prepare for websocket
+  wsClient := TWebsocketClient.Create(URI.Host, 443, '/'+URI.Document + '?' + URI.Params);
+  wsClient.OnHandshakeSuccess := @wsHandlerHandshakeSuccess;
+  wsClient.OnHandshakeFailure := @wsHandlerHandshakeFailure;
+  OpenSSLSocketHandler := TOpenSSLSocketHandler.Create;
+  if isDebug then
+  begin
+    WriteLn('ws host:' + wsClient.Host);
+    WriteLn('ws path:' + wsClient.Path);
+    WriteLn('ws port:' + IntToStr(wsClient.Port));
+  end;
+
   //For auto resuming session
   latestSN := LatestSNCode;
 
 
-  GetGateway();
+
 
   //if isDebug then WriteLn('Gateway:' + GatewayURL);
 
@@ -118,17 +131,20 @@ begin
   isConnectionOK := False;
   HeartBeatThreadObj.Free;
 
-
-  wsCommunicator.StopReceiveMessageThread;
   wsCommunicator.WriteMessage(wmtClose).Free;
+  wsCommunicator.StopReceiveMessageThread;
+
   while wsCommunicator.ReceiveMessageThreadRunning do
     Sleep(10);
   wsCommunicator.Free;
+
   wsClient.Free;
 
   httpClient.Free;
-  OpenSSLSocketHandler.Free;
 
+  //OpenSSLSocketHandler.Free;
+
+  inherited Destroy;
 end;
 
 function TKookBot.GetGateway(IsResume: boolean = False): boolean;
@@ -137,7 +153,7 @@ var
   resp: string;
   respJSON: TJSONObject;
   ResumeParam: string;
-  URI: TURI;
+
 begin
   if IsResume then ResumeParam := '&resume=1&sn=' + IntToStr(latestSN);
   try
@@ -148,15 +164,7 @@ begin
   respJSON := GetJSON(resp) as TJSONObject;
   GatewayURL := respJSON.Objects['data'].Strings['url'];
 
-  URI := ParseURI(GatewayURL, 'wss', 443, True);
-  wsClient.Host := URI.Host;
-  wsClient.Path := URI.Path + URI.Document + '?' + URI.Params;
-  if isDebug then
-  begin
-    WriteLn('ws host:' + wsClient.Host);
-    WriteLn('ws path:' + wsClient.Path);
-    WriteLn('ws port:' + IntToStr(wsClient.Port));
-  end;
+
 
   respJSON.Free;
   exit(True);
